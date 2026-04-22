@@ -12,40 +12,38 @@ server_socket.bind((SERVER_HOST, SERVER_PORT))
 server_socket.listen(5)
 # The backlog parameter = 5, tells use the maximum number of fully established connections that can wait in the queue.
 
-print("Waiting for client...")
-client_socket, client_address = server_socket.accept()
-# accept() says: “Pause here until someone connects.”
-# accepts any TCP connection, not specifically HTTP.
-# browsers communicate using the HTTP protocol over TCP, Brave connected and sent an HTTP request.
 
-print(f"Client Socket: {client_socket}")
-print(f"Connected by: {client_address}")
-# Till this much I am just starting a TCP server.
 
-data = client_socket.recv(1024)
-# recv() means: “Wait and read incoming data from the client.”
-# Receive up to 1024 bytes of data from the connected client.
-print("Decoding data...")
-print(data.decode())
+
 
 response = (
     "HTTP/1.1 200 OK\r\n"
     "Content-Type: text/plain\r\n"
-    "Content-Length: 12\r\n"
+    "Content-Length: 38\r\n"
     "\r\n"
-    "Hello Client"
+    "Hello Client Hello Client Hello Client"
 )
-client_socket.send(response.encode())
 
 while True:
+    print("Waiting for client...")
     client_socket, client_address = server_socket.accept()
+    # accept() says: “Pause here until someone connects.”
+    # accepts any TCP connection, not specifically HTTP.
+    # browsers communicate using the HTTP protocol over TCP, Brave connected and sent an HTTP request.
+
+    print(f"Client Socket: {client_socket}")
+    print(f"Connected by: {client_address}")
+    # Till this much I am just starting a TCP server.
 
     data = client_socket.recv(1024)
+    # recv() means: “Wait and read incoming data from the client.”
+    # Receive up to 1024 bytes of data from the connected client.
+    print("Decoding data...")
     print(data.decode())
 
     client_socket.send(response.encode())
 
-    client_socket.close()
+    #client_socket.close()
 
 
 # Some clients are lenient, but official HTTP specification expects:
@@ -57,6 +55,3 @@ while True:
 #Sockets work at the network level, where data is just sequences of bytes—not Python text objects.
 #HTTP messages, TCP packets, etc., are all ultimately transmitted as bytes.
 # So, str  → encode() → bytes → send()
-
-client_socket.close()
-server_socket.close()
