@@ -13,15 +13,14 @@ server_socket.listen(5)
 # The backlog parameter = 5, tells use the maximum number of fully established connections that can wait in the queue.
 
 
-
-
+response_body = "Hello Client Hello Client Hello Client"
 
 response = (
     "HTTP/1.1 200 OK\r\n"
     "Content-Type: text/plain\r\n"
-    "Content-Length: 38\r\n"
+    f"Content-Length: {len(response_body)}\r\n"
     "\r\n"
-    "Hello Client Hello Client Hello Client"
+    f"{response_body}"
 )
 
 while True:
