@@ -58,7 +58,7 @@ while True:
         client_socket.send(response.encode())
 
         client_socket.close()
-    except:
+    except BlockingIOError:
         time.sleep(2)
         continue
 
