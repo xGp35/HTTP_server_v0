@@ -8,38 +8,12 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Add some optionsal settings to change the default behaviour of sockets
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.setblocking(True)
-
+# Blocking mode, so the statements in except block don't run
 
 server_socket.bind((SERVER_HOST, SERVER_PORT))
 
 server_socket.listen(5)
 # The backlog parameter = 5, tells use the maximum number of fully established connections that can wait in the queue.
-
-
-response_body = "Hello Client Hello Client Hello Client"
-fin = open('index.html')
-content = fin.read()
-fin.close()
-
-response_body = f"{response_body} \n {content}"
-
-response = (
-    "HTTP/1.1 200 OK\r\n"
-    "Content-Type: text/html\r\n"
-    f"Content-Length: {len(content.encode())}\r\n"
-    "\r\n"
-    f"{content}"
-)
-
-# while True:
-#     try:
-#         client_socket, client_address = server_socket.accept()
-#         print(f"Client Socket: {client_socket}")
-#         print(f"Connected by: {client_address}")
-#     except:
-#         time.sleep(1)
-#         print("I am in except block")
-#         continue    
 
 
 while True:
@@ -68,12 +42,14 @@ while True:
 
         if http_method == 'GET':
             if path == '/':
-                response = response
+                fin = open('index.html')
             elif path == '/book':
                 fin = open('book.json')
-                content = fin.read()
-                fin.close()
-                response = 'HTTP/1.1 200 OK\n\n' + content
+            else:
+                response = 'HTTP/1.1 404 Not Found\n\n'
+            content = fin.read()
+            fin.close()
+            response = 'HTTP/1.1 200 OK\n\n' + content
         else:
             response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
         client_socket.sendall(response.encode())
@@ -81,14 +57,3 @@ while True:
     except BlockingIOError:
         time.sleep(2)
         continue
-
-
-# Some clients are lenient, but official HTTP specification expects:
-# CRLF = \r\n
-# So when building HTTP manually, always use \r\n.
-
-# What .encode() does? It converts a string into bytes, usually using UTF-8 by default.
-
-#Sockets work at the network level, where data is just sequences of bytes—not Python text objects.
-#HTTP messages, TCP packets, etc., are all ultimately transmitted as bytes.
-# So, str  → encode() → bytes → send()
