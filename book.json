@@ -1,0 +1,33 @@
+{
+  "title": "HTTP Server in Practice",
+  "author": "xGp35",
+  "published": 2026,
+  "isbn": "978-1-23456-789-7",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Introduction to HTTP",
+      "pages": 24
+    },
+    {
+      "number": 2,
+      "title": "Building a Basic Server",
+      "pages": 32
+    },
+    {
+      "number": 3,
+      "title": "Routing and Handlers",
+      "pages": 28
+    },
+    {
+      "number": 4,
+      "title": "Static Files and APIs",
+      "pages": 30
+    },
+    {
+      "number": 5,
+      "title": "Security and Deployment",
+      "pages": 26
+    }
+  ]
+}
