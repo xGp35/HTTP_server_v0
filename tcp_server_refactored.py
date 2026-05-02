@@ -41,17 +41,23 @@ while True:
         path = first_header_components[1]
 
         if http_method == 'GET':
+            file_path = None
+
             if path == '/':
-                fin = open('index.html')
+                file_path = 'index.html'
             elif path == '/book':
-                fin = open('book.json')
+                file_path = 'book.json'
+
+            if file_path:
+                fin = open(file_path)
+                content = fin.read()
+                fin.close()
+                response = 'HTTP/1.1 200 OK\r\n\r\n' + content
             else:
-                response = 'HTTP/1.1 404 Not Found\n\n'
-            content = fin.read()
-            fin.close()
-            response = 'HTTP/1.1 200 OK\n\n' + content
+                response = 'HTTP/1.1 404 Not Found\r\n\r\n'
+
         else:
-            response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
+            response = 'HTTP/1.1 405 Method Not Allowed\r\n\r\nAllow: GET'
         client_socket.sendall(response.encode())
         client_socket.close()
     except BlockingIOError:
